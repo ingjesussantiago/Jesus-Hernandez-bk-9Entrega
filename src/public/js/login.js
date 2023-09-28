@@ -1,6 +1,4 @@
-console.log("desde Login");
-
-const form = document.getElementById('loginForm');
+const form = document.getElementById('loginForm')
 
 form.addEventListener('submit', e => {
     e.preventDefault();
@@ -20,5 +18,14 @@ form.addEventListener('submit', e => {
         if (result.status === 200) {
             window.location.replace('/api/products')
         }
+        else if(result.status === 400){
+            alert("correo invalido, resivar credenciales!")
+        }
+        else if(result.status === 401){
+            alert("Login invalido, resivar credenciales!")
+        }
+    }).catch(function(error){
+        alert("resivar")
     })
 })
+

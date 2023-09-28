@@ -1,5 +1,3 @@
-console.log("corriendo prueba");
-
 const form = document.getElementById('registroform');
 
 form.addEventListener('submit', e => {
@@ -19,6 +17,8 @@ form.addEventListener('submit', e => {
     }).then(result => {
         if (result.status === 200) {
             window.location.replace('/login')
+        } else {
+            alert("No se pudo crear el usuario!");
         }
-    })
+    }).then(json => console.log(json));
 })

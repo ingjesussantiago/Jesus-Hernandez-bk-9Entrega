@@ -1,6 +1,8 @@
 import { dirname } from "path"
 import { fileURLToPath } from "url"
 import multer from "multer"
+//2
+import bcrypt from "bcrypt"
 
 
 export const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -33,4 +35,12 @@ export const uploader = multer({
     }
 });
 
+//bcryp
+//3
+export const createHash = contrasena => bcrypt.hashSync(contrasena, bcrypt.genSaltSync(10))
+//4
+export const isValidPassword = (user, contrasena) => {
+    console.log(`Datos a validar: user-password: ${user.contrasena}, password: ${contrasena}`);
+    return bcrypt.compareSync(contrasena, user.contrasena)
+}
 
