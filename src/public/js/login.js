@@ -15,14 +15,17 @@ form.addEventListener('submit', e => {
             'Content-Type': 'application/json'
         }
     }).then(result => {
-        if (result.status === 201) {
+        if (result.status === 200) {
             window.location.replace('/api/products')
         }
-        else if(result.status === 400){
+        else if(result.status === 404){
             alert("correo invalido, resivar credenciales!")
         }
         else if(result.status === 401){
             alert("Login invalido, resivar credenciales!")
+        }
+        else if(result.status === 500){
+            alert("revisa datos incorrectos")
         }
     }).catch(function(error){
         alert("resivar")

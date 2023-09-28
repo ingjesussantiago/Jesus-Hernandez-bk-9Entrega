@@ -1,7 +1,7 @@
 import passport from "passport"
 import passportLocal from "passport-local"
 import userModel from "../dao/mongoosedb/models/user.model.js"
-import { createHash } from "../../utils.js"
+import { createHash,isValidPassword } from "../../utils.js"
 
 const localStrategy = passportLocal.Strategy
 
