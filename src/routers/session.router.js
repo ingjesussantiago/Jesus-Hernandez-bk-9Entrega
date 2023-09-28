@@ -1,83 +1,50 @@
 import { Router } from "express";
-import { __dirname } from "../../utils.js"
 import userModel from "../dao/mongoosedb/models/user.model.js"
-import { createHash, isValidPassword } from "../../utils.js";
-
+import passport from "passport";//11
 
 
 const router = Router()
-
-router.post("/registro", async (req, res) => {
-    const { nombre, apellido, email, edad, contrasena } = req.body;
-    console.log("registrado");
-    console.log(req.body);
-
-    const existe = await userModel.findOne({ email }).lean()
-    if (existe) {
-        return res.status(400).send({ status: "error", mensaje: "usuario ya existe" })
-    }
-
-    const user = {
-        nombre,
-        apellido,
-        email,
-        edad,
-        contrasena: createHash(contrasena )
-
-    }
-
-    const result = await userModel.create(user)
-    res.send({
-        status: "success", mensaje: "usuario creado " + result.id
-    })
-
-  
+//12
+router.post("/registro", passport.authenticate('registro', { failureRedirect: '/api/sessions/fail-register' }), async (req, res) => {
+    console.log("Registrando nuevo usuario.");
+    res.status(201).send({ status: "success", message: "Usuario creado con extito." })
 
 })
 
-router.post("/login", async (req, res) => {
-    const { email, contrasena } = req.body
-    const user = await userModel.findOne({ email })
-
-    console.log("desde mongo", user);
-    if (!user ) return res.status(400).send({ status: "error", error: "datos incorrectos" })
-    
-       
-
-    //8
-    if (!isValidPassword(user, contrasena)) {
-        return res.status(401).send({ status: "error", error: "Incorrect credentials" });
-     
-    }
 
 
-    // alta a ssecion
+router.post("/login", passport.authenticate("login", { failureRedirect: '/api/sessions/fail-login' }), async (req, res) => {
+    console.log("User found to login:");
+    const user = req.user;
+    console.log(user);
+
+    if (!user) return res.status(401).send({ status: "error", error: "credenciales incorrectas" });
     req.session.user = {
         nombre: `${user.nombre} ${user.apellido}`,
         email: user.email,
-        edad: user.edad,
-
+        edad: user.edad
     }
-    console.log("desde re", req.session.user);
+    res.send({ status: "success", payload: req.session.user, message: "¡Primer logueo realizado! :)" });
+});
 
-    if (email === `adminCoder@coder.com` && contrasena === `1234`) {
-        req.session.user.rol = "administrador"
-
-    } else {
-        req.session.user.rol = "usuario"
-    }
-    console.log(req.session);
-
-
-    res.send({ status: "succes", payload: req.session.user, mensaje: "primer logeo" })
-
-})
 
 router.get("/logout", (req, res) => {
     req.session.destroy(() => {
         res.redirect("/login")
         console.log("paso todo");
     })
+
+
 })
 
+router.get("/fail-register", (req, res) => {
+    res.status(401).send({ error: "Failed to process register!" });
+});
+
+router.get("/fail-login", (req, res) => {
+    res.status(401).send({ error: "Failed to process login!" });
+});
+
+
 export default router
+

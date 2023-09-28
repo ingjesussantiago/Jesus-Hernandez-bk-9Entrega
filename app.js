@@ -13,6 +13,8 @@ import cookieParser from "cookie-parser"
 // import  FileStore from "session-file-store"
 import MongoStore from "connect-mongo"
 import mongoose from "mongoose"
+import passport from "passport"
+import initializePassport from "./src/config/passport.config.js"
 
 
 
@@ -39,6 +41,10 @@ app.use(session({
     resave:true,
     saveUninitialized:true
 }))
+
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.engine("handlebars", handlebars.engine())
 app.set("views", __dirname + "/src/views")

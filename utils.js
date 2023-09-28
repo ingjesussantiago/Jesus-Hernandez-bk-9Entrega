@@ -37,10 +37,10 @@ export const uploader = multer({
 
 //bcryp
 //3
-export const createHash = contrasena => bcrypt.hashSync(contrasena, bcrypt.genSaltSync(10))
+export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 //4
-export const isValidPassword = (user, contrasena) => {
-    console.log(`Datos a validar: user-password: ${user.contrasena}, password: ${contrasena}`);
-    return bcrypt.compareSync(contrasena, user.contrasena)
+export const isValidPassword = (user, password) => {
+    console.log(`Datos a validar: user-password: ${user.password}, password: ${password}`);
+    return bcrypt.compareSync(password, user.password)
 }
 

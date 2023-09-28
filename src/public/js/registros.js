@@ -15,7 +15,7 @@ form.addEventListener('submit', e => {
             'Content-Type': 'application/json'
         }
     }).then(result => {
-        if (result.status === 200) {
+        if (result.status === 201) {
             window.location.replace('/login')
         } else {
             alert("No se pudo crear el usuario!");
