@@ -11,7 +11,8 @@ const schema = new mongoose.Schema({
     },
     edad: Number,
     rol:String,
-    password: String 
+    password: String,
+    loggedBy:String
 })
 
 const userModel = mongoose.model(collection, schema);

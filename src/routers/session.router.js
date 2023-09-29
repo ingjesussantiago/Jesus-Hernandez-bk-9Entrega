@@ -46,5 +46,26 @@ router.get("/fail-login", (req, res) => {
 });
 
 
+router.get("/github", passport.authenticate('github', {
+    scope: ['user:email']
+}), async (req, res) => { });
+
+
+router.get("/githubcallback", passport.authenticate('github', { failureRedirect: '/github/error' }),
+    async (req, res) => {
+        const user = req.user;
+        req.session.user = {
+            nombre: `${user.nombre} ${user.apellido}`,
+            email: user.email,
+            edad: user.edad
+        };
+        req.session.admin = true;
+        res.redirect("/user");
+    });
+
+
+
+
+
 export default router
 

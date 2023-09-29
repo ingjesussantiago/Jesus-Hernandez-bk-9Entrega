@@ -1,5 +1,6 @@
 import passport from "passport"
 import passportLocal from "passport-local"
+import  GitHubStrategy from "passport-github2"
 import userModel from "../dao/mongoosedb/models/user.model.js"
 import { createHash,isValidPassword } from "../../utils.js"
 
@@ -81,6 +82,79 @@ const initializePassport = () => {
             console.error("Error deserializando el usuario: " + error);
         }
     });
+
+
+
+
+    passport.use('github', new GitHubStrategy(
+        {
+            clientID: 'Iv1.9bf4fac70e3a1ae7',
+            clientSecret: '9df325879298be423ad0abaa6384c477ee1fb905',
+            callbackUrl: 'http://localhost:8080/api/session/githubcallback'
+        },
+        async (accessToken, refreshToken, profile, done) => {
+            console.log("Profile obtenido del usuario: ");
+            console.log("desde log",profile);
+
+            try {
+                const user = await userModel.findOne({ email: profile._json.email })
+                console.log("Usuario encontrado para login:");
+                console.log(user);
+
+                if (!user) {
+                    console.warn("User doesn't exists with username: " + profile._json.email);
+                    let User = {
+                        nombre: profile._json.name,
+                        apellido: '',
+                        edad: "",
+                        email: profile._json.email,
+                        password: '',
+                        loggedBy: "GitHub"
+                    }
+                    const result = await userModel.create(User)
+                    console.log("desde",result);
+                    done(null, result)
+                }
+                else {
+                    return done(null, user)
+                }
+            } catch (error) {
+                return done(error)
+            }
+        }))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -5,6 +5,7 @@ import viewRouter from "./src/routers/view.router.js"
 import cartsRouter from "./src/routers/carts.Router.js"
 import loginRouter from "./src/routers/login.Router.js"
 import sessionRouter from "./src/routers/session.router.js"
+import githubviews from "./src/routers/github.views.Router.js"
 import handlebars from "express-handlebars"
 import { Server } from "socket.io"
 import "./src/dao/mongoosedb/dbConfig.js"
@@ -58,7 +59,7 @@ app.use("/api/session",sessionRouter)
 app.use("/login",loginRouter)
 
 app.use("/", viewRouter)
-
+app.use("/github",githubviews )
 
 
 
